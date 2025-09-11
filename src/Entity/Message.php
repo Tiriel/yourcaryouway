@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
-#[Broadcast(topics: ['chat'])]
+#[Broadcast(template: 'channel/message.stream.html.twig')]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {

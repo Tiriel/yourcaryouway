@@ -1,0 +1,16 @@
+{% props message = null %}
+
+<div{{ attributes }}>
+    <div class="container">
+        <div class="row">
+            <div class="col-7 rounded my-2 py-2 {{ message.sentBy == app.user ? 'offset-5 bg-info-subtle' : 'bg-danger-subtle' }}">
+                <div
+                    class="border-bottom {{ message.sentBy == app.user ? 'text-end' : 'text-start' }}">
+                    <p><strong class="d-block">{{ message.sentBy.firstname }}</strong>
+                        <i class="d-block">{{ message.createdAt|date('d M Y') }}</i></p>
+                </div>
+                <div>{{ message.content }}</div>
+            </div>
+        </div>
+    </div>
+</div>

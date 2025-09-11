@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Lazy;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -22,13 +23,17 @@ final class ChannelController extends AbstractController
     }
 
     #[IsGranted('IS_AUTHENTICATED')]
-    #[Route('/chat', name: 'app_channel_chat', methods: ['GET'])]
-    public function chat(#[CurrentUser] User $user, ChannelRepository $channelRepository, MessageRepository $messageRepository): Response
+    #[Route('/chat', name: 'app_channel_chat', methods: ['GET', 'POST'])]
+    public function chat(#[CurrentUser] User $user, ChannelRepository $channelRepository): Response
     {
         $channel = $channelRepository->findForUser($user);
 
         if (null === $channel) {
-            $support = $this->manager->getRepository(User::class)->findOneBy(['online' => true]);
+            $support = $this->manager->getRepository(User::class)->findSupportUser();
+            if (null === $support) {
+                throw new \Exception('Il n\'y a pas d\'utilisateur support connecté');
+            }
+
             $channel = new Channel()
                 ->addUser($support)
                 ->addUser($user)
@@ -38,11 +43,8 @@ final class ChannelController extends AbstractController
             $this->manager->flush();
         }
 
-        $messages = $messageRepository->findBy(['channel' => $channel], ['createdAt' => 'ASC']);
-
         return $this->render('channel/chat.html.twig', [
             'channel' => $channel,
-            'messages' => $messages,
         ]);
     }
 }

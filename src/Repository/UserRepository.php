@@ -8,6 +8,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use function Doctrine\ORM\QueryBuilder;
+use function Symfony\Component\Clock\now;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -31,6 +33,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    public function findSupportUser(): ?User
+    {
+            $rsm = $this->createResultSetMappingBuilder('u');
+
+            $rawQuery = sprintf(
+                'SELECT %s
+                FROM public.user u
+                WHERE u.roles::jsonb ?? :role
+                LIMIT 1',
+                $rsm->generateSelectClause()
+            );
+            $query = $this->getEntityManager()->createNativeQuery($rawQuery, $rsm);
+            $query
+                ->setParameter('role', 'ROLE_SUPPORT');
+
+            return $query->getResult()[0] ?? null;
     }
 
     //    /**

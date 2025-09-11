@@ -1,0 +1,32 @@
+<div{{ attributes }}>
+    <section class="vh-100">
+        <div class="container h-50 m-3 p-3 overflow-auto border border-1 rounded" id="messages" {{ turbo_stream_listen('App\\Entity\\Message') }}>
+            {% for message in channel.messages %}
+                <twig:MessageComponent :message="message"></twig:MessageComponent>
+            {% endfor %}
+        </div>
+        <turbo-frame id="message_form">
+            {{ form_start(form, {
+                attr: {
+                    'data-action': 'live#action:prevent',
+                    'data-live-action-param': 'save'
+                }
+            }) }}
+            {{ form_widget(form) }}
+            <button>Envoyer</button>
+            {{ form_end(form) }}
+        </turbo-frame>
+        <script type="application/javascript">
+            scrollToBottom = function (e) {
+                console.log('fired: '+e.type);
+                let messages = document.getElementById('messages');
+                messages.scrollTop = messages.scrollHeight;
+            };
+            document.addEventListener('turbo:before-stream-render', function (e) {
+                console.log('Fired? '+e.type)
+            });
+            document.addEventListener('turbo:load', scrollToBottom);
+            document.addEventListener('turbo:before-stream-render', scrollToBottom);
+        </script>
+    </section>
+</div>

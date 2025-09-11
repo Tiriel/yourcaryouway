@@ -21,7 +21,9 @@ class ChannelRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        return $qb->where($qb->expr()->in(':id', 'c.users'))
+        return $qb
+            ->join('c.users', 'u')
+            ->where($qb->expr()->in('u.id', ':id'))
             ->setParameter(':id', $user->getId())
             ->getQuery()
             ->getOneOrNullResult();

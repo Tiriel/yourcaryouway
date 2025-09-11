@@ -1,0 +1,13 @@
+{% block create %}
+    <turbo-stream action="append" target="#messages">
+        <template>
+            <twig:MessageComponent :message="entity"></twig:MessageComponent>
+        </template>
+    </turbo-stream>
+{% endblock %}
+
+{% block update %}
+{% endblock %}
+
+{% block remove %}
+{% endblock %}
