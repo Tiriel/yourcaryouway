@@ -1,0 +1,14 @@
+{% props message = null %}
+
+<div{{ attributes }}>
+    <div data-message-style-target="wrapper" class="d-flex w-100">
+        <div
+            class="rounded rounded-5 m-3 p-3 align-self-start">
+            <strong>{{ message.sentBy.firstname }}</strong>
+        </div>
+        <div>
+            <div data-message-style-target="content" class="rounded rounded-4 mt-3 p-3">{{ message.content }}</div>
+            <i data-message-style-target="date" class="d-block">{{ message.createdAt|date('d M Y') }}</i>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<div{{ attributes }}>
+    <turbo-frame id="message_form">
+        {{ form_start(form, {
+            attr: {
+                'data-action': 'live#action:prevent',
+                'data-live-action-param': 'save'
+            }
+        }) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-outline-primary">Envoyer</button>
+        {{ form_end(form) }}
+    </turbo-frame>
+    <script type="application/javascript">
+        document.querySelector('form[name=message]').addEventListener('submit', function (e) {
+            document.getElementById('message_content').value = "";
+        });
+    </script>
+</div>

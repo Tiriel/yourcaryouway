@@ -1,0 +1,21 @@
+{% block create %}
+    <turbo-stream action="append" target="messages">
+        <template>
+            <twig:MessageComponent :message="entity"
+                                   data-controller="message-style scroll"
+                                   data-message-style-from-id-value="{{ entity.sentBy.id }}">
+            </twig:MessageComponent>
+        </template>
+    </turbo-stream>
+{% endblock %}
+
+{% block update %}
+    <turbo-stream action="replace" target="#messages">
+        <template>
+            <twig:MessageComponent :message="entity" data-controller="message-style scroll"></twig:MessageComponent>
+        </template>
+    </turbo-stream>
+{% endblock %}
+
+{% block remove %}
+{% endblock %}

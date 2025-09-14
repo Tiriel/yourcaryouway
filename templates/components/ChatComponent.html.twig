@@ -1,0 +1,17 @@
+{% props channel = null %}
+
+<div{{ attributes }}>
+    <section style="height: 75vh;">
+        <div class="container h-75 m-3 p-3 overflow-auto border border-1 rounded"
+             id="messages" {{ turbo_stream_listen('messages', 'default', {withCredentials: true}) }}>
+            <span id="current-user" data-id="{{ app.user.id }}"></span>
+            {% for message in channel.messages %}
+                <twig:MessageComponent :message="message"
+                                       data-controller="message-style{{ loop.last ? ' scroll' }}"
+                                       data-message-style-from-id-value="{{ message.sentBy.id }}">
+                </twig:MessageComponent>
+            {% endfor %}
+        </div>
+        <twig:ChatFormComponent :channel="channel"></twig:ChatFormComponent>
+    </section>
+</div>

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacter le support{% endblock %}
+
+{% block body %}
+<section>
+    <h2>Chattez avec le support</h2>
+
+    <twig:ChatComponent :channel="channel"></twig:ChatComponent>
+</section>
+{% endblock %}
