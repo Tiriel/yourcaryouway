@@ -3,7 +3,7 @@
 <div{{ attributes }}>
     <section style="height: 75vh;">
         <div class="container h-75 m-3 p-3 overflow-auto border border-1 rounded"
-             id="messages" {{ turbo_stream_listen('messages', 'default', {withCredentials: true}) }}>
+             id="messages" {{ turbo_stream_listen('messages_channel-'~channel.id, 'default', {withCredentials: true}) }}>
             <span id="current-user" data-id="{{ app.user.id }}"></span>
             {% for message in channel.messages %}
                 <twig:MessageComponent :message="message"

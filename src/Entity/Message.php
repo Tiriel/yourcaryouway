@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-#[Broadcast(topics: ['messages'])]
+#[Broadcast(topics: ['@="messages_channel-" ~ entity.getChannel().getId()'])]
 class Message
 {
     #[ORM\Id]
